@@ -318,13 +318,13 @@
         }
 
         .alert-danger {
-            background: rgba(255, 0, 0, 0.1) !important;
-            color: #ff0000 !important;
-            border: 2px solid #ff0000 !important;
+            background: rgb(0, 0, 0) !important;
+            color: #00ff00 !important;
+            border: 2px solid #00ff00 !important;
             font-weight: bold !important;
             font-family: 'Courier Prime', monospace !important;
             text-transform: uppercase !important;
-            box-shadow: 0 0 15px rgba(255, 0, 0, 0.5) !important;
+            box-shadow: 0 0 20px rgba(0, 255, 0, 0.6) !important;
             animation: text-flicker 2s infinite !important;
         }
 
