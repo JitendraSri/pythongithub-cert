@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Python and GitHub Workshop Certificate</title>
+    
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    
+    <link rel="stylesheet" href="style.css">
+    <style>
+        body {
+            background-color: #000;
+            color: #fff;
+        }
+        .matrix-rain {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: -1;
+        }
+        .matrix-column {
+            position: absolute;
+            top: 0;
+            width: 1px;
+            height: 100%;
+            font-family: monospace;
+            font-size: 12px;
+            color: #0f0;
+            opacity: 0.5;
+            animation: matrixFall linear infinite;
+            animation-fill-mode: forwards;
+        }
+        @keyframes matrixFall {
+            0% {
+                transform: translateY(0);
+            }
+            100% {
+                transform: translateY(100vh);
+            }
+        }
+    </style>
+
+    <script>
+        // Matrix Rain Effect
+        function createMatrixRain() {
+            const matrixContainer = document.getElementById('matrixRain');
+            const characters = '010111001111010101010101101101101100010011000101010001101100010111100011110011000100011100101101';
+            
+            // Create multiple columns at once with random starting positions
+            for (let i = 0; i < 35; i++) {
+                const column = document.createElement('div');
+                column.className = 'matrix-column';
+                
+                // Random positioning with slight overlap
+                const leftPos = Math.floor(Math.random() * 100);
+                column.style.left = leftPos + '%';
+                
+                // Set random starting position (0 to -100%)
+                const startPosition = Math.random() * -1;
+                column.style.setProperty('--start-position', startPosition);
+                
+                // Random animation properties for natural look
+                const duration = (Math.random() * 3 + 5) + 's';  // 5-8 seconds
+                const delay = Math.random() * 2 + 's';            // 0-2 seconds
+                
+                column.style.animationDuration = duration;
+                column.style.animationDelay = delay;
+                
+                // Add both animations
+                column.style.animation = `matrixStart 0.1s forwards, matrixFall ${duration} linear infinite ${delay}`;
+                
+                // Random character count for variation
+                const charCount = Math.floor(Math.random() * 15) + 15;
+                
+                let text = '';
+                for (let j = 0; j < charCount; j++) {
+                    text += characters.charAt(Math.floor(Math.random() * characters.length)) + '<br>';
+                }
+                column.innerHTML = text;
+                
+                matrixContainer.appendChild(column);
+            }
+            
+            // Create additional columns immediately for full effect
+            setTimeout(() => {
+                for (let i = 0; i < 35; i++) {
+                    const column = document.createElement('div');
+                    column.className = 'matrix-column';
+                    
+                    const leftPos = Math.floor(Math.random() * 100);
+                    column.style.left = leftPos + '%';
+                    
+                    const duration = (Math.random() * 3 + 5) + 's';
+                    const delay = Math.random() * 2 + 's';
+                    
+                    column.style.animationDuration = duration;
+                    column.style.animationDelay = delay;
+                    
+                    const charCount = Math.floor(Math.random() * 15) + 15;
+                    
+                    let text = '';
+                    for (let j = 0; j < charCount; j++) {
+                        text += characters.charAt(Math.floor(Math.random() * characters.length)) + '<br>';
+                    }
+                    column.innerHTML = text;
+                    
+                    matrixContainer.appendChild(column);
+                }
+            }, 1000);
+        }
+        
+        // Certificate Generation Function
+        function generateCertificate() {
+            const rollNo = document.getElementById('rollNo').value.trim();
+            const canvas = document.getElementById('certificateCanvas');
+            const ctx = canvas.getContext('2d');
+            const certificateResult = document.getElementById('certificateResult');
+            const notRegisteredMessage = document.getElementById('notRegisteredMessage');
+            const downloadLink = document.getElementById('downloadLink');
+            
+            // Check if roll number exists in studentsData
+            fetch('script.js')
+                .then(response => response.text())
+                .then(data => {
+                    const studentsData = data.match(/const studentsData = ({.*?});/s)[1];
+                    const studentData = eval(studentsData);
+                    
+                    if (studentData[rollNo]) {
+                        // Show certificate
+                        certificateResult.style.display = 'block';
+                        notRegisteredMessage.style.display = 'none';
+                        
+                        // Draw certificate
+                        const certificateTemplate = new Image();
+                        certificateTemplate.src = 'Blue Gold Elegant Certificate of Participation.png';
+                        certificateTemplate.onload = function() {
+                            canvas.width = certificateTemplate.width;
+                            canvas.height = certificateTemplate.height;
+                            ctx.drawImage(certificateTemplate, 0, 0);
+                            
+                            // Add student name
+                            ctx.font = 'bold 36px Arial';
+                            ctx.fillStyle = '#000';
+                            ctx.textAlign = 'center';
+                            ctx.fillText(studentData[rollNo], canvas.width / 2, canvas.height / 2);
+                            
+                            // Enable download
+                            downloadLink.href = canvas.toDataURL('image/png');
+                            downloadLink.style.display = 'block';
+                        };
+                    } else {
+                        // Show not registered message
+                        certificateResult.style.display = 'none';
+                        notRegisteredMessage.style.display = 'block';
+                    }
+                });
+        }
+        
+    </script>
+    <script>
+        // Initialize matrix rain effect
+        window.onload = function() {
+            createMatrixRain();
+        };
+    </script>
+</head>
+<body>
+    <div class="matrix-background" id="matrixBackground"></div>
+    <div class="matrix-rain" id="matrixRain"></div>
+
+    <div class="terminal-header" style="background: rgba(0, 0, 0, 0.95); border-bottom: 3px solid #00ff00;">
+            <div class="status" style="color: #00ff00;">
+                <span style="color: #00ff00;">[PYTHON & GITHUB WORKSHOP]</span>
+                <span style="color: #00aa00;">SECURITY LEVEL: 0</span>
+            </div>
+    </div>
+
+    <div class="container my-5">
+        <div class="row justify-content-center">
+            <div class="col-lg-8 col-md-10 col-sm-12">
+                <div class="card shadow-lg p-4">
+                    <h1 class="card-title text-center mb-4">Python and GitHub Workshop Certificate</h1>
+                    <p class="text-center lead">Enter your roll number to download your certificate.</p>
+                    
+                    <form id="certificateForm" class="mb-4" onsubmit="event.preventDefault(); generateCertificate();">
+                        <div class="mb-3">
+                            <input type="text" id="rollNo" class="form-control" placeholder="Enter Roll Number" required>
+                        </div>
+                        <div class="d-grid gap-2">
+                            <button class="btn btn-primary" type="submit">Generate Certificate</button>
+                        </div>
+                    </form>
+
+                    <div id="certificateResult" class="text-center" style="display: none;">
+                        <canvas id="certificateCanvas" class="img-fluid border rounded shadow-sm"></canvas>
+                        <a id="downloadLink" class="btn btn-success mt-3" style="display: none;">Click to Download</a>
+                    </div>
+                    
+                    <div id="notRegisteredMessage" class="text-center alert alert-danger" style="display: none;">
+                        You are not registered for the Python and GitHub workshop. Better luck next time!
+                    </div>
+
+                    <div class="text-center mt-4">
+                        <a href="https://forms.gle/d4GK1T424LkaS2L69" target="_blank" class="btn btn-info btn-lg">
+                            Give Feedback
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+    <script src="script.js"></script>
+</body>
+</html>
